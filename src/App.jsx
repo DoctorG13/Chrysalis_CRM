@@ -5,20 +5,44 @@ function App() {
   const [showClientForm, setShowClientForm] = useState(false);
 
   const [clients, setClients] = useState([
-    "Sarah Smith",
-    "Emma Brown",
-    "Louise White",
-  ]);
+  {
+    name: "Sarah Smith",
+    phone: "0412 345 678",
+    email: "sarah@email.com",
+  },
+  {
+    name: "Emma Brown",
+    phone: "0400 111 222",
+    email: "emma@email.com",
+  },
+  {
+    name: "Louise White",
+    phone: "0400 222 333",
+    email: "louise@email.com",
+  },
+]);
 
   const [clientName, setClientName] = useState("");
+  const [clientPhone, setClientPhone] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
 
   const saveClient = () => {
-    if (clientName.trim() === "") return;
+  if (clientName.trim() === "") return;
 
-    setClients([...clients, clientName]);
-    setClientName("");
-    setShowClientForm(false);
+  const newClient = {
+    name: clientName,
+    phone: clientPhone,
+    email: clientEmail,
   };
+
+  setClients([...clients, newClient]);
+
+  setClientName("");
+  setClientPhone("");
+  setClientEmail("");
+
+  setShowClientForm(false);
+};
 
   return (
     <div
@@ -164,22 +188,26 @@ function App() {
                 />
 
                 <input
-                  placeholder="Phone"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
+  placeholder="Phone"
+  value={clientPhone}
+  onChange={(e) => setClientPhone(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
 
                 <input
-                  placeholder="Email"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
+  placeholder="Email"
+  value={clientEmail}
+  onChange={(e) => setClientEmail(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
 
                 <button
                   onClick={saveClient}
@@ -207,8 +235,20 @@ function App() {
               <h3>Client List</h3>
 
               {clients.map((client, index) => (
-                <p key={index}>👗 {client}</p>
-              ))}
+  <div
+    key={index}
+    style={{
+      padding: "15px",
+      borderBottom: "1px solid #ddd",
+    }}
+  >
+    <strong>{client.name}</strong>
+
+    <p>📞 {client.phone}</p>
+
+    <p>📧 {client.email}</p>
+  </div>
+))}
             </div>
           </>
         )}
