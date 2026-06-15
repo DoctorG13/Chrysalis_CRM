@@ -1,50 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [page, setPage] = useState("dashboard");
   const [showClientForm, setShowClientForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [clients, setClients] = useState([
-    {
-      name: "Sarah Smith",
-      phone: "0412 345 678",
-      email: "sarah@email.com",
-      notes: [
-        "Wedding dress fitting booked.",
-        "Bringing original lace trim.",
-      ],
-      jobs: [
+  const [clients, setClients] = useState(() => {
+  const savedClients = localStorage.getItem(
+    "chrysalisClients"
+  );
+
+  return savedClients
+    ? JSON.parse(savedClients)
+    : [
         {
-          name: "Wedding Dress Alteration",
-          status: "In Progress",
+          name: "Sarah Smith",
+          phone: "0412 345 678",
+          email: "sarah@email.com",
+          notes: [
+            "Wedding dress fitting booked.",
+            "Bringing original lace trim.",
+          ],
+          jobs: [
+            {
+              name: "Wedding Dress Alteration",
+              status: "In Progress",
+            },
+            {
+              name: "Lace Bodice Adjustment",
+              status: "Awaiting Fitting",
+            },
+          ],
         },
         {
-          name: "Lace Bodice Adjustment",
-          status: "Awaiting Fitting",
+          name: "Emma Brown",
+          phone: "0400 111 222",
+          email: "emma@email.com",
+          notes: ["Formal dress alteration."],
+          jobs: [
+            {
+              name: "Evening Gown Hem",
+              status: "Quote",
+            },
+          ],
         },
-      ],
-    },
-    {
-      name: "Emma Brown",
-      phone: "0400 111 222",
-      email: "emma@email.com",
-      notes: ["Formal dress alteration."],
-      jobs: [
         {
-          name: "Evening Gown Hem",
-          status: "Quote",
+          name: "Louise White",
+          phone: "0400 222 333",
+          email: "louise@email.com",
+          notes: [],
+          jobs: [],
         },
-      ],
-    },
-    {
-      name: "Louise White",
-      phone: "0400 222 333",
-      email: "louise@email.com",
-      notes: [],
-      jobs: [],
-    },
-  ]);
+      ];
+});
 
   const [selectedClient, setSelectedClient] = useState(null);
 
@@ -514,6 +522,23 @@ function App() {
                     <button onClick={addNote}>
                       Add Note
                     </button>
+                    <hr />
+
+<h3>📏 Measurements</h3>
+
+<p>No measurements recorded.</p>
+
+<hr />
+
+<h3>📅 Appointments</h3>
+
+<p>No appointments scheduled.</p>
+
+<hr />
+
+<h3>💰 Payments</h3>
+
+<p>No payments recorded.</p>
                   </div>
                 ) : (
                   <div
