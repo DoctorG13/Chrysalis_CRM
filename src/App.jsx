@@ -3,6 +3,7 @@ import { useState } from "react";
 function App() {
   const [page, setPage] = useState("dashboard");
   const [showClientForm, setShowClientForm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [clients, setClients] = useState([
     {
@@ -55,9 +56,9 @@ function App() {
   const [newJob, setNewJob] = useState("");
 
   const saveClient = () => {
-    if (clientName.trim() === "") return;
+    if (!clientName.trim()) return;
 
-    const newClient = {
+    const client = {
       name: clientName,
       phone: clientPhone,
       email: clientEmail,
@@ -65,7 +66,7 @@ function App() {
       jobs: [],
     };
 
-    setClients([...clients, newClient]);
+    setClients([...clients, client]);
 
     setClientName("");
     setClientPhone("");
@@ -75,8 +76,7 @@ function App() {
   };
 
   const addNote = () => {
-    if (!selectedClient) return;
-    if (newNote.trim() === "") return;
+    if (!selectedClient || !newNote.trim()) return;
 
     const updatedClients = clients.map((client) => {
       if (client.name === selectedClient.name) {
@@ -92,16 +92,16 @@ function App() {
     setClients(updatedClients);
 
     const updatedClient = updatedClients.find(
-      (client) => client.name === selectedClient.name
+      (c) => c.name === selectedClient.name
     );
 
     setSelectedClient(updatedClient);
+
     setNewNote("");
   };
 
   const addJob = () => {
-    if (!selectedClient) return;
-    if (newJob.trim() === "") return;
+    if (!selectedClient || !newJob.trim()) return;
 
     const updatedClients = clients.map((client) => {
       if (client.name === selectedClient.name) {
@@ -123,12 +123,40 @@ function App() {
     setClients(updatedClients);
 
     const updatedClient = updatedClients.find(
-      (client) => client.name === selectedClient.name
+      (c) => c.name === selectedClient.name
     );
 
     setSelectedClient(updatedClient);
 
     setNewJob("");
+  };
+
+  const updateJobStatus = (jobIndex, newStatus) => {
+    const updatedClients = clients.map((client) => {
+      if (client.name === selectedClient.name) {
+        const updatedJobs = [...client.jobs];
+
+        updatedJobs[jobIndex] = {
+          ...updatedJobs[jobIndex],
+          status: newStatus,
+        };
+
+        return {
+          ...client,
+          jobs: updatedJobs,
+        };
+      }
+
+      return client;
+    });
+
+    setClients(updatedClients);
+
+    const updatedClient = updatedClients.find(
+      (c) => c.name === selectedClient.name
+    );
+
+    setSelectedClient(updatedClient);
   };
 
   const getStatusColor = (status) => {
@@ -172,34 +200,30 @@ function App() {
       >
         <h2>🌸 Chrysalis Studio</h2>
 
-        <p style={{ opacity: 0.8 }}>
-          Dressmaking Management
-        </p>
+        <p>Dressmaking Management</p>
 
         <hr />
 
-        <div style={{ marginTop: "20px" }}>
-          <p
-            style={{ cursor: "pointer" }}
-            onClick={() => setPage("dashboard")}
-          >
-            📊 Dashboard
-          </p>
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => setPage("dashboard")}
+        >
+          📊 Dashboard
+        </p>
 
-          <p
-            style={{ cursor: "pointer" }}
-            onClick={() => setPage("clients")}
-          >
-            👗 Clients
-          </p>
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => setPage("clients")}
+        >
+          👗 Clients
+        </p>
 
-          <p>📏 Measurements</p>
-          <p>🧵 Jobs</p>
-          <p>📅 Appointments</p>
-          <p>💰 Payments</p>
-          <p>📈 Reports</p>
-          <p>⚙️ Settings</p>
-        </div>
+        <p>📏 Measurements</p>
+        <p>🧵 Jobs</p>
+        <p>📅 Appointments</p>
+        <p>💰 Payments</p>
+        <p>📈 Reports</p>
+        <p>⚙️ Settings</p>
       </div>
 
       {/* Main Content */}
@@ -253,234 +277,263 @@ function App() {
           <>
             <h1>Clients</h1>
 
-            <button
-              onClick={() => setShowClientForm(!showClientForm)}
-              style={{
-                background: "#7A9A6D",
-                color: "white",
-                border: "none",
-                padding: "10px 15px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                marginBottom: "20px",
-              }}
-            >
-              + Add Client
-            </button>
-
-            {showClientForm && (
-              <div
-                style={{
-                  background: "white",
-                  padding: "20px",
-                  borderRadius: "12px",
-                  marginBottom: "20px",
-                }}
-              >
-                <h3>New Client</h3>
-
-                <input
-                  placeholder="Client Name"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
-
-                <input
-                  placeholder="Phone"
-                  value={clientPhone}
-                  onChange={(e) => setClientPhone(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
-
-                <input
-                  placeholder="Email"
-                  value={clientEmail}
-                  onChange={(e) => setClientEmail(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
-
-                <button
-                  onClick={saveClient}
-                  style={{
-                    background: "#7A9A6D",
-                    color: "white",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Save Client
-                </button>
-              </div>
-            )}
-
             <div
               style={{
-                background: "white",
-                padding: "20px",
-                borderRadius: "12px",
+                display: "flex",
+                gap: "20px",
+                alignItems: "flex-start",
               }}
             >
-              <h3>Client List</h3>
-
-              {clients.map((client, index) => (
-                <div
-                  key={index}
-                  onClick={() => setSelectedClient(client)}
+              {/* LEFT PANEL */}
+              <div style={{ width: "35%" }}>
+                <button
+                  onClick={() => setShowClientForm(!showClientForm)}
                   style={{
-                    padding: "15px",
-                    borderBottom: "1px solid #ddd",
+                    width: "100%",
+                    background: "#7A9A6D",
+                    color: "white",
+                    border: "none",
+                    padding: "12px",
+                    borderRadius: "8px",
                     cursor: "pointer",
+                    marginBottom: "15px",
                   }}
                 >
-                  <strong>{client.name}</strong>
+                  + Add Client
+                </button>
 
-                  <p>📞 {client.phone}</p>
+                <input
+                  placeholder="🔍 Search Clients..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    marginBottom: "15px",
+                    borderRadius: "8px",
+                    border: "1px solid #ccc",
+                  }}
+                />
 
-                  <p>📧 {client.email}</p>
+                {showClientForm && (
+                  <div
+                    style={{
+                      background: "white",
+                      padding: "20px",
+                      borderRadius: "12px",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    <h3>New Client</h3>
 
-                  <p>🧵 Jobs: {client.jobs.length}</p>
-                </div>
-              ))}
-            </div>
-
-            {selectedClient && (
-              <div
-                style={{
-                  background: "white",
-                  padding: "20px",
-                  borderRadius: "12px",
-                  marginTop: "20px",
-                }}
-              >
-                <h2>{selectedClient.name}</h2>
-
-                <p>📞 {selectedClient.phone}</p>
-
-                <p>📧 {selectedClient.email}</p>
-
-                <hr />
-
-                <h3>Measurements</h3>
-                <p>No measurements yet.</p>
-
-                <h3>Jobs</h3>
-
-                {selectedClient.jobs.length === 0 ? (
-                  <p>No jobs yet.</p>
-                ) : (
-                  selectedClient.jobs.map((job, index) => (
-                    <div
-                      key={index}
+                    <input
+                      placeholder="Name"
+                      value={clientName}
+                      onChange={(e) => setClientName(e.target.value)}
                       style={{
-                        background: "#f5f5f5",
+                        width: "100%",
                         padding: "10px",
                         marginBottom: "10px",
-                        borderRadius: "8px",
                       }}
-                    >
-                      <strong>🧵 {job.name}</strong>
+                    />
 
-                      <div style={{ marginTop: "8px" }}>
-                        <span
+                    <input
+                      placeholder="Phone"
+                      value={clientPhone}
+                      onChange={(e) => setClientPhone(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        marginBottom: "10px",
+                      }}
+                    />
+
+                    <input
+                      placeholder="Email"
+                      value={clientEmail}
+                      onChange={(e) => setClientEmail(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        marginBottom: "10px",
+                      }}
+                    />
+
+                    <button onClick={saveClient}>
+                      Save Client
+                    </button>
+                  </div>
+                )}
+
+                <div
+                  style={{
+                    background: "white",
+                    borderRadius: "12px",
+                    padding: "20px",
+                  }}
+                >
+                  <h3>Client List</h3>
+
+                  {clients
+                    .filter((client) =>
+                      client.name
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase())
+                    )
+                    .map((client, index) => (
+                      <div
+                        key={index}
+                        onClick={() => setSelectedClient(client)}
+                        style={{
+                          padding: "12px",
+                          borderBottom: "1px solid #ddd",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <strong>{client.name}</strong>
+
+                        <p>🧵 Jobs: {client.jobs.length}</p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {/* RIGHT PANEL */}
+              <div style={{ width: "65%" }}>
+                {selectedClient ? (
+                  <div
+                    style={{
+                      background: "white",
+                      padding: "20px",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    <h2>{selectedClient.name}</h2>
+
+                    <p>📞 {selectedClient.phone}</p>
+                    <p>📧 {selectedClient.email}</p>
+
+                    <hr />
+
+                    <h3>Jobs</h3>
+
+                    {selectedClient.jobs.length === 0 ? (
+                      <p>No jobs yet.</p>
+                    ) : (
+                      selectedClient.jobs.map((job, index) => (
+                        <div
+                          key={index}
                           style={{
-                            background: getStatusColor(job.status),
-                            color: "white",
-                            padding: "5px 10px",
-                            borderRadius: "20px",
-                            fontSize: "12px",
+                            background: "#f5f5f5",
+                            padding: "10px",
+                            marginBottom: "10px",
+                            borderRadius: "8px",
                           }}
                         >
-                          {job.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
+                          <strong>🧵 {job.name}</strong>
 
-                <input
-                  placeholder="Job name..."
-                  value={newJob}
-                  onChange={(e) => setNewJob(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginTop: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
+                          <div style={{ marginTop: "8px" }}>
+                            <select
+                              value={job.status}
+                              onChange={(e) =>
+                                updateJobStatus(
+                                  index,
+                                  e.target.value
+                                )
+                              }
+                              style={{
+                                background:
+                                  getStatusColor(job.status),
+                                color: "white",
+                                border: "none",
+                                padding: "8px",
+                                borderRadius: "8px",
+                              }}
+                            >
+                              <option value="Quote">
+                                Quote
+                              </option>
+                              <option value="In Progress">
+                                In Progress
+                              </option>
+                              <option value="Awaiting Fitting">
+                                Awaiting Fitting
+                              </option>
+                              <option value="Completed">
+                                Completed
+                              </option>
+                              <option value="Collected">
+                                Collected
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                      ))
+                    )}
 
-                <button
-                  onClick={addJob}
-                  style={{
-                    background: "#7A9A6D",
-                    color: "white",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Add Job
-                </button>
+                    <input
+                      placeholder="Job name..."
+                      value={newJob}
+                      onChange={(e) => setNewJob(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        marginBottom: "10px",
+                      }}
+                    />
 
-                <h3>Payments</h3>
-                <p>No payments yet.</p>
+                    <button onClick={addJob}>
+                      Add Job
+                    </button>
 
-                <h3>Appointments</h3>
-                <p>No appointments yet.</p>
+                    <hr />
 
-                <h3>Notes</h3>
+                    <h3>Notes</h3>
 
-                {selectedClient.notes.length === 0 ? (
-                  <p>No notes yet.</p>
+                    {selectedClient.notes.length === 0 ? (
+                      <p>No notes yet.</p>
+                    ) : (
+                      selectedClient.notes.map(
+                        (note, index) => (
+                          <p key={index}>• {note}</p>
+                        )
+                      )
+                    )}
+
+                    <input
+                      placeholder="Add note..."
+                      value={newNote}
+                      onChange={(e) => setNewNote(e.target.value)}
+                      style={{
+                        width: "100%",
+                        padding: "10px",
+                        marginBottom: "10px",
+                      }}
+                    />
+
+                    <button onClick={addNote}>
+                      Add Note
+                    </button>
+                  </div>
                 ) : (
-                  selectedClient.notes.map((note, index) => (
-                    <p key={index}>• {note}</p>
-                  ))
+                  <div
+                    style={{
+                      background: "white",
+                      padding: "40px",
+                      borderRadius: "12px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <h2>Select a Client</h2>
+
+                    <p>
+                      Choose a client from the list to
+                      view their profile.
+                    </p>
+                  </div>
                 )}
-
-                <input
-                  placeholder="Add note..."
-                  value={newNote}
-                  onChange={(e) => setNewNote(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginTop: "10px",
-                    marginBottom: "10px",
-                  }}
-                />
-
-                <button
-                  onClick={addNote}
-                  style={{
-                    background: "#7A9A6D",
-                    color: "white",
-                    border: "none",
-                    padding: "10px 15px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Add Note
-                </button>
               </div>
-            )}
+            </div>
           </>
         )}
       </div>
