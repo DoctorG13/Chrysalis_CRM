@@ -5,37 +5,57 @@ function App() {
   const [showClientForm, setShowClientForm] = useState(false);
 
   const [clients, setClients] = useState([
-    {
-      name: "Sarah Smith",
-      phone: "0412 345 678",
-      email: "sarah@email.com",
-    },
-    {
-      name: "Emma Brown",
-      phone: "0400 111 222",
-      email: "emma@email.com",
-    },
-    {
-      name: "Louise White",
-      phone: "0400 222 333",
-      email: "louise@email.com",
-    },
-  ]);
+  {
+    name: "Sarah Smith",
+    phone: "0412 345 678",
+    email: "sarah@email.com",
+    notes: [
+      "Wedding dress fitting booked.",
+      "Bringing original lace trim.",
+    ],
+    jobs: [
+      "Wedding Dress Alteration",
+      "Lace Bodice Adjustment",
+    ],
+  },
+  {
+    name: "Emma Brown",
+    phone: "0400 111 222",
+    email: "emma@email.com",
+    notes: [
+      "Formal dress alteration.",
+    ],
+    jobs: [
+      "Evening Gown Hem",
+    ],
+  },
+  {
+    name: "Louise White",
+    phone: "0400 222 333",
+    email: "louise@email.com",
+    notes: [],
+    jobs: [],
+  },
+]);
 
   const [selectedClient, setSelectedClient] = useState(null);
 
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientEmail, setClientEmail] = useState("");
+  const [newNote, setNewNote] = useState("");
+  const [newJob, setNewJob] = useState("");
 
   const saveClient = () => {
     if (clientName.trim() === "") return;
 
     const newClient = {
-      name: clientName,
-      phone: clientPhone,
-      email: clientEmail,
-    };
+  name: clientName,
+  phone: clientPhone,
+  email: clientEmail,
+  notes: [],
+  jobs: [],
+};
 
     setClients([...clients, newClient]);
 
@@ -45,6 +65,59 @@ function App() {
 
     setShowClientForm(false);
   };
+
+  const addNote = () => {
+  if (!selectedClient) return;
+  if (newNote.trim() === "") return;
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        notes: [...client.notes, newNote],
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+
+  setNewNote("");
+};
+
+const addJob = () => {
+  if (!selectedClient) return;
+  if (newJob.trim() === "") return;
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        jobs: [...client.jobs, newJob],
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+
+  setNewJob("");
+};
+
 
   return (
     <div
@@ -258,6 +331,7 @@ function App() {
                   <p>📞 {client.phone}</p>
 
                   <p>📧 {client.email}</p>
+                  <p>🧵 Jobs: {client.jobs.length}</p>
                 </div>
               ))}
             </div>
@@ -284,7 +358,40 @@ function App() {
                 <p>No measurements yet.</p>
 
                 <h3>Jobs</h3>
-                <p>No jobs yet.</p>
+
+{selectedClient.jobs.length === 0 ? (
+  <p>No jobs yet.</p>
+) : (
+  selectedClient.jobs.map((job, index) => (
+    <p key={index}>🧵 {job}</p>
+  ))
+)}
+
+<input
+  placeholder="Job name..."
+  value={newJob}
+  onChange={(e) => setNewJob(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={addJob}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Add Job
+</button>
 
                 <h3>Payments</h3>
                 <p>No payments yet.</p>
@@ -293,7 +400,40 @@ function App() {
                 <p>No appointments yet.</p>
 
                 <h3>Notes</h3>
-                <p>No notes yet.</p>
+
+{selectedClient.notes.length === 0 ? (
+  <p>No notes yet.</p>
+) : (
+  selectedClient.notes.map((note, index) => (
+    <p key={index}>• {note}</p>
+  ))
+)}
+
+<input
+  placeholder="Add note..."
+  value={newNote}
+  onChange={(e) => setNewNote(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={addNote}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Add Note
+</button>
               </div>
             )}
           </>
