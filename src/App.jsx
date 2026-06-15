@@ -447,14 +447,23 @@ function App() {
                         key={index}
                         onClick={() => setSelectedClient(client)}
                         style={{
-                          padding: "12px",
-                          borderBottom: "1px solid #ddd",
-                          cursor: "pointer",
-                        }}
+  padding: "12px",
+  borderBottom: "1px solid #ddd",
+  cursor: "pointer",
+  background:
+    selectedClient?.name === client.name
+      ? "#E8F0E4"
+      : "white",
+  borderLeft:
+    selectedClient?.name === client.name
+      ? "5px solid #7A9A6D"
+      : "5px solid transparent",
+}}
                       >
                         <strong>{client.name}</strong>
 
                         <p>🧵 Jobs: {client.jobs.length}</p>
+                        <p>📝 Notes: {client.notes.length}</p>
                       </div>
                     ))}
                 </div>
