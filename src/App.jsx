@@ -5,53 +5,52 @@ function App() {
   const [showClientForm, setShowClientForm] = useState(false);
 
   const [clients, setClients] = useState([
-  {
-    name: "Sarah Smith",
-    phone: "0412 345 678",
-    email: "sarah@email.com",
-    notes: [
-      "Wedding dress fitting booked.",
-      "Bringing original lace trim.",
-    ],
-    jobs: [
-  {
-    name: "Wedding Dress Alteration",
-    status: "In Progress",
-  },
-  {
-    name: "Lace Bodice Adjustment",
-    status: "Awaiting Fitting",
-  },
-],
-  },
-  {
-    name: "Emma Brown",
-    phone: "0400 111 222",
-    email: "emma@email.com",
-    notes: [
-      "Formal dress alteration.",
-    ],
-    jobs: [
-  {
-    name: "Evening Gown Hem",
-    status: "Quote",
-  },
-],
-  },
-  {
-    name: "Louise White",
-    phone: "0400 222 333",
-    email: "louise@email.com",
-    notes: [],
-    jobs: [],
-  },
-]);
+    {
+      name: "Sarah Smith",
+      phone: "0412 345 678",
+      email: "sarah@email.com",
+      notes: [
+        "Wedding dress fitting booked.",
+        "Bringing original lace trim.",
+      ],
+      jobs: [
+        {
+          name: "Wedding Dress Alteration",
+          status: "In Progress",
+        },
+        {
+          name: "Lace Bodice Adjustment",
+          status: "Awaiting Fitting",
+        },
+      ],
+    },
+    {
+      name: "Emma Brown",
+      phone: "0400 111 222",
+      email: "emma@email.com",
+      notes: ["Formal dress alteration."],
+      jobs: [
+        {
+          name: "Evening Gown Hem",
+          status: "Quote",
+        },
+      ],
+    },
+    {
+      name: "Louise White",
+      phone: "0400 222 333",
+      email: "louise@email.com",
+      notes: [],
+      jobs: [],
+    },
+  ]);
 
   const [selectedClient, setSelectedClient] = useState(null);
 
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientEmail, setClientEmail] = useState("");
+
   const [newNote, setNewNote] = useState("");
   const [newJob, setNewJob] = useState("");
 
@@ -59,12 +58,12 @@ function App() {
     if (clientName.trim() === "") return;
 
     const newClient = {
-  name: clientName,
-  phone: clientPhone,
-  email: clientEmail,
-  notes: [],
-  jobs: [],
-};
+      name: clientName,
+      phone: clientPhone,
+      email: clientEmail,
+      notes: [],
+      jobs: [],
+    };
 
     setClients([...clients, newClient]);
 
@@ -76,63 +75,83 @@ function App() {
   };
 
   const addNote = () => {
-  if (!selectedClient) return;
-  if (newNote.trim() === "") return;
+    if (!selectedClient) return;
+    if (newNote.trim() === "") return;
 
-  const updatedClients = clients.map((client) => {
-    if (client.name === selectedClient.name) {
-      return {
-        ...client,
-        notes: [...client.notes, newNote],
-      };
+    const updatedClients = clients.map((client) => {
+      if (client.name === selectedClient.name) {
+        return {
+          ...client,
+          notes: [...client.notes, newNote],
+        };
+      }
+
+      return client;
+    });
+
+    setClients(updatedClients);
+
+    const updatedClient = updatedClients.find(
+      (client) => client.name === selectedClient.name
+    );
+
+    setSelectedClient(updatedClient);
+    setNewNote("");
+  };
+
+  const addJob = () => {
+    if (!selectedClient) return;
+    if (newJob.trim() === "") return;
+
+    const updatedClients = clients.map((client) => {
+      if (client.name === selectedClient.name) {
+        return {
+          ...client,
+          jobs: [
+            ...client.jobs,
+            {
+              name: newJob,
+              status: "Quote",
+            },
+          ],
+        };
+      }
+
+      return client;
+    });
+
+    setClients(updatedClients);
+
+    const updatedClient = updatedClients.find(
+      (client) => client.name === selectedClient.name
+    );
+
+    setSelectedClient(updatedClient);
+
+    setNewJob("");
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Quote":
+        return "#3498db";
+
+      case "In Progress":
+        return "#2ecc71";
+
+      case "Awaiting Fitting":
+        return "#f1c40f";
+
+      case "Completed":
+        return "#27ae60";
+
+      case "Collected":
+        return "#7f8c8d";
+
+      default:
+        return "#bdc3c7";
     }
-
-    return client;
-  });
-
-  setClients(updatedClients);
-
-  const updatedClient = updatedClients.find(
-    (client) => client.name === selectedClient.name
-  );
-
-  setSelectedClient(updatedClient);
-
-  setNewNote("");
-};
-
-const addJob = () => {
-  if (!selectedClient) return;
-  if (newJob.trim() === "") return;
-
-  const updatedClients = clients.map((client) => {
-    if (client.name === selectedClient.name) {
-      return {
-        ...client,
-        jobs: [
-  ...client.jobs,
-  {
-    name: newJob,
-    status: "Quote",
-  },
-],
-      };
-    }
-
-    return client;
-  });
-
-  setClients(updatedClients);
-
-  const updatedClient = updatedClients.find(
-    (client) => client.name === selectedClient.name
-  );
-
-  setSelectedClient(updatedClient);
-
-  setNewJob("");
-};
-
+  };
 
   return (
     <div
@@ -191,7 +210,6 @@ const addJob = () => {
           background: "#F7F5F0",
         }}
       >
-        {/* Dashboard */}
         {page === "dashboard" && (
           <>
             <h1>Good Morning Donna</h1>
@@ -231,15 +249,12 @@ const addJob = () => {
           </>
         )}
 
-        {/* Clients */}
         {page === "clients" && (
           <>
             <h1>Clients</h1>
 
             <button
-              onClick={() =>
-                setShowClientForm(!showClientForm)
-              }
+              onClick={() => setShowClientForm(!showClientForm)}
               style={{
                 background: "#7A9A6D",
                 color: "white",
@@ -267,9 +282,7 @@ const addJob = () => {
                 <input
                   placeholder="Client Name"
                   value={clientName}
-                  onChange={(e) =>
-                    setClientName(e.target.value)
-                  }
+                  onChange={(e) => setClientName(e.target.value)}
                   style={{
                     width: "100%",
                     padding: "10px",
@@ -280,9 +293,7 @@ const addJob = () => {
                 <input
                   placeholder="Phone"
                   value={clientPhone}
-                  onChange={(e) =>
-                    setClientPhone(e.target.value)
-                  }
+                  onChange={(e) => setClientPhone(e.target.value)}
                   style={{
                     width: "100%",
                     padding: "10px",
@@ -293,9 +304,7 @@ const addJob = () => {
                 <input
                   placeholder="Email"
                   value={clientEmail}
-                  onChange={(e) =>
-                    setClientEmail(e.target.value)
-                  }
+                  onChange={(e) => setClientEmail(e.target.value)}
                   style={{
                     width: "100%",
                     padding: "10px",
@@ -319,7 +328,6 @@ const addJob = () => {
               </div>
             )}
 
-            {/* Client List */}
             <div
               style={{
                 background: "white",
@@ -332,9 +340,7 @@ const addJob = () => {
               {clients.map((client, index) => (
                 <div
                   key={index}
-                  onClick={() =>
-                    setSelectedClient(client)
-                  }
+                  onClick={() => setSelectedClient(client)}
                   style={{
                     padding: "15px",
                     borderBottom: "1px solid #ddd",
@@ -346,12 +352,12 @@ const addJob = () => {
                   <p>📞 {client.phone}</p>
 
                   <p>📧 {client.email}</p>
+
                   <p>🧵 Jobs: {client.jobs.length}</p>
                 </div>
               ))}
             </div>
 
-            {/* Client Profile */}
             {selectedClient && (
               <div
                 style={{
@@ -374,51 +380,63 @@ const addJob = () => {
 
                 <h3>Jobs</h3>
 
-{selectedClient.jobs.length === 0 ? (
-  <p>No jobs yet.</p>
-) : (
-  selectedClient.jobs.map((job, index) => (
-  <div
-    key={index}
-    style={{
-      marginBottom: "10px",
-      padding: "10px",
-      background: "#f5f5f5",
-      borderRadius: "8px",
-    }}
-  >
-    <strong>🧵 {job.name}</strong>
+                {selectedClient.jobs.length === 0 ? (
+                  <p>No jobs yet.</p>
+                ) : (
+                  selectedClient.jobs.map((job, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        background: "#f5f5f5",
+                        padding: "10px",
+                        marginBottom: "10px",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <strong>🧵 {job.name}</strong>
 
-    <p>Status: {job.status}</p>
-  </div>
-))
-)}
+                      <div style={{ marginTop: "8px" }}>
+                        <span
+                          style={{
+                            background: getStatusColor(job.status),
+                            color: "white",
+                            padding: "5px 10px",
+                            borderRadius: "20px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {job.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
 
-<input
-  placeholder="Job name..."
-  value={newJob}
-  onChange={(e) => setNewJob(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-  }}
-/>
+                <input
+                  placeholder="Job name..."
+                  value={newJob}
+                  onChange={(e) => setNewJob(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                />
 
-<button
-  onClick={addJob}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Add Job
-</button>
+                <button
+                  onClick={addJob}
+                  style={{
+                    background: "#7A9A6D",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Add Job
+                </button>
 
                 <h3>Payments</h3>
                 <p>No payments yet.</p>
@@ -428,39 +446,39 @@ const addJob = () => {
 
                 <h3>Notes</h3>
 
-{selectedClient.notes.length === 0 ? (
-  <p>No notes yet.</p>
-) : (
-  selectedClient.notes.map((note, index) => (
-    <p key={index}>• {note}</p>
-  ))
-)}
+                {selectedClient.notes.length === 0 ? (
+                  <p>No notes yet.</p>
+                ) : (
+                  selectedClient.notes.map((note, index) => (
+                    <p key={index}>• {note}</p>
+                  ))
+                )}
 
-<input
-  placeholder="Add note..."
-  value={newNote}
-  onChange={(e) => setNewNote(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-  }}
-/>
+                <input
+                  placeholder="Add note..."
+                  value={newNote}
+                  onChange={(e) => setNewNote(e.target.value)}
+                  style={{
+                    width: "100%",
+                    padding: "10px",
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                />
 
-<button
-  onClick={addNote}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Add Note
-</button>
+                <button
+                  onClick={addNote}
+                  style={{
+                    background: "#7A9A6D",
+                    color: "white",
+                    border: "none",
+                    padding: "10px 15px",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Add Note
+                </button>
               </div>
             )}
           </>
