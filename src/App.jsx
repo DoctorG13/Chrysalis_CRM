@@ -14,9 +14,15 @@ function App() {
       "Bringing original lace trim.",
     ],
     jobs: [
-      "Wedding Dress Alteration",
-      "Lace Bodice Adjustment",
-    ],
+  {
+    name: "Wedding Dress Alteration",
+    status: "In Progress",
+  },
+  {
+    name: "Lace Bodice Adjustment",
+    status: "Awaiting Fitting",
+  },
+],
   },
   {
     name: "Emma Brown",
@@ -26,8 +32,11 @@ function App() {
       "Formal dress alteration.",
     ],
     jobs: [
-      "Evening Gown Hem",
-    ],
+  {
+    name: "Evening Gown Hem",
+    status: "Quote",
+  },
+],
   },
   {
     name: "Louise White",
@@ -363,8 +372,20 @@ const addJob = () => {
   <p>No jobs yet.</p>
 ) : (
   selectedClient.jobs.map((job, index) => (
-    <p key={index}>🧵 {job}</p>
-  ))
+  <div
+    key={index}
+    style={{
+      marginBottom: "10px",
+      padding: "10px",
+      background: "#f5f5f5",
+      borderRadius: "8px",
+    }}
+  >
+    <strong>🧵 {job.name}</strong>
+
+    <p>Status: {job.status}</p>
+  </div>
+))
 )}
 
 <input
