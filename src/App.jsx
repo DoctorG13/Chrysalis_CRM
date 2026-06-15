@@ -109,7 +109,13 @@ const addJob = () => {
     if (client.name === selectedClient.name) {
       return {
         ...client,
-        jobs: [...client.jobs, newJob],
+        jobs: [
+  ...client.jobs,
+  {
+    name: newJob,
+    status: "Quote",
+  },
+],
       };
     }
 
