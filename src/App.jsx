@@ -15,8 +15,15 @@ function App() {
     : [
         {
           name: "Sarah Smith",
-          phone: "0412 345 678",
-          email: "sarah@email.com",
+  phone: "0412 345 678",
+  email: "sarah@email.com",
+  clientSince: "11 Jun 2026",
+
+  measurements: {
+    bust: "92",
+    waist: "72",
+    hips: "98",
+  },
           notes: [
             "Wedding dress fitting booked.",
             "Bringing original lace trim.",
@@ -36,6 +43,12 @@ function App() {
           name: "Emma Brown",
           phone: "0400 111 222",
           email: "emma@email.com",
+          clientSince: "15 Jun 2025",
+          measurements: {
+  bust: "",
+  waist: "",
+  hips: "",
+},
           notes: ["Formal dress alteration."],
           jobs: [
             {
@@ -48,7 +61,13 @@ function App() {
           name: "Louise White",
           phone: "0400 222 333",
           email: "louise@email.com",
+          clientSince: "12 Jul 2025",
           notes: [],
+          measurements: {
+  bust: "",
+  waist: "",
+  hips: "",
+},
           jobs: [],
         },
       ];
@@ -496,9 +515,11 @@ function App() {
 >
   <h2>{selectedClient.name}</h2>
 
-  <p>📞 {selectedClient.phone}</p>
+<p>📞 {selectedClient.phone}</p>
 
-  <p>📧 {selectedClient.email}</p>
+<p>📧 {selectedClient.email}</p>
+
+<p>📅 Client Since: {selectedClient.clientSince}</p>
 
   <hr />
 
@@ -616,7 +637,17 @@ function App() {
 
 <h3>📏 Measurements</h3>
 
-<p>No measurements recorded.</p>
+<p>
+  Bust: {selectedClient.measurements?.bust || "-"}
+</p>
+
+<p>
+  Waist: {selectedClient.measurements?.waist || "-"}
+</p>
+
+<p>
+  Hips: {selectedClient.measurements?.hips || "-"}
+</p>
 
 <hr />
 
