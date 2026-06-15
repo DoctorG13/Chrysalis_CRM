@@ -247,6 +247,60 @@ function App() {
             <h1>Good Morning Donna</h1>
 
             <div
+  style={{
+    display: "flex",
+    gap: "20px",
+    marginBottom: "20px",
+  }}
+>
+  <div
+    style={{
+      background: "white",
+      padding: "20px",
+      borderRadius: "12px",
+      flex: 1,
+    }}
+  >
+    <h3>👗 Clients</h3>
+    <h1>{clients.length}</h1>
+  </div>
+
+  <div
+    style={{
+      background: "white",
+      padding: "20px",
+      borderRadius: "12px",
+      flex: 1,
+    }}
+  >
+    <h3>🧵 Jobs</h3>
+    <h1>
+      {clients.reduce(
+        (total, client) => total + client.jobs.length,
+        0
+      )}
+    </h1>
+  </div>
+
+  <div
+    style={{
+      background: "white",
+      padding: "20px",
+      borderRadius: "12px",
+      flex: 1,
+    }}
+  >
+    <h3>📝 Notes</h3>
+    <h1>
+      {clients.reduce(
+        (total, client) => total + client.notes.length,
+        0
+      )}
+    </h1>
+  </div>
+</div>
+
+            <div
               style={{
                 background: "white",
                 padding: "20px",
