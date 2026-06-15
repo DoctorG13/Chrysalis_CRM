@@ -56,6 +56,13 @@ function App() {
 
   const [selectedClient, setSelectedClient] = useState(null);
 
+  useEffect(() => {
+  if (!selectedClient && clients.length > 0) {
+    setSelectedClient(clients[0]);
+  }
+}, [clients, selectedClient]);
+
+
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [clientEmail, setClientEmail] = useState("");
