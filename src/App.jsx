@@ -24,6 +24,16 @@ function App() {
     waist: "72",
     hips: "98",
   },
+  appointments: [
+  {
+    date: "15 Jul 2026",
+    type: "Initial Consultation",
+  },
+  {
+    date: "22 Jul 2026",
+    type: "First Fitting",
+  },
+],
           notes: [
             "Wedding dress fitting booked.",
             "Bringing original lace trim.",
@@ -49,6 +59,7 @@ function App() {
   waist: "",
   hips: "",
 },
+appointments: [],
           notes: ["Formal dress alteration."],
           jobs: [
             {
@@ -68,6 +79,7 @@ function App() {
   waist: "",
   hips: "",
 },
+appointments: [],
           jobs: [],
         },
       ];
@@ -732,7 +744,17 @@ const [hips, setHips] = useState("");
 
 <h3>📅 Appointments</h3>
 
-<p>No appointments scheduled.</p>
+{selectedClient.appointments?.length > 0 ? (
+  selectedClient.appointments.map(
+    (appointment, index) => (
+      <p key={index}>
+        📅 {appointment.date} - {appointment.type}
+      </p>
+    )
+  )
+) : (
+  <p>No appointments scheduled.</p>
+)}
 
 <hr />
 
