@@ -49,15 +49,18 @@ payments: [
             "Bringing original lace trim.",
           ],
           jobs: [
-            {
-              name: "Wedding Dress Alteration",
-              status: "In Progress",
-            },
-            {
-              name: "Lace Bodice Adjustment",
-              status: "Awaiting Fitting",
-            },
-          ],
+  {
+    name: "Wedding Dress Alteration",
+    quote: 850,
+    status: "In Progress",
+  },
+  {
+    name: "Lace Bodice Adjustment",
+    quote: 150,
+    status: "Awaiting Fitting",
+  },
+],
+
         },
         {
           name: "Emma Brown",
@@ -73,9 +76,10 @@ appointments: [],
           notes: ["Formal dress alteration."],
           jobs: [
             {
-              name: "Evening Gown Hem",
-              status: "Quote",
-            },
+  name: "Evening Gown Hem",
+  quote: 180,
+  status: "Quote",
+},
           ],
         },
         {
@@ -111,6 +115,7 @@ payments: [],
 
   const [newNote, setNewNote] = useState("");
   const [newJob, setNewJob] = useState("");
+  const [newQuote, setNewQuote] = useState("");
   const [bust, setBust] = useState("");
 const [waist, setWaist] = useState("");
 const [hips, setHips] = useState("");
@@ -193,9 +198,10 @@ const [paymentDescription, setPaymentDescription] =
           jobs: [
             ...client.jobs,
             {
-              name: newJob,
-              status: "Quote",
-            },
+  name: newJob,
+  quote: Number(newQuote),
+  status: "Quote",
+},
           ],
         };
       }
@@ -212,6 +218,7 @@ const [paymentDescription, setPaymentDescription] =
     setSelectedClient(updatedClient);
 
     setNewJob("");
+    setNewQuote("");
   };
 
 const saveMeasurements = () => {
@@ -738,6 +745,33 @@ const addPayment = () => {
                           }}
                         >
                           <strong>🧵 {job.name}</strong>
+                          <p>
+  Quote: ${job.quote || 0}
+</p>
+
+<p>
+  Paid: $
+  {selectedClient.payments.reduce(
+    (total, payment) =>
+      total + Number(payment.amount),
+    0
+  )}
+</p>
+
+<p
+  style={{
+    fontWeight: "bold",
+    color: "#b22222",
+  }}
+>
+  Balance: $
+  {(job.quote || 0) -
+    selectedClient.payments.reduce(
+      (total, payment) =>
+        total + Number(payment.amount),
+      0
+    )}
+</p>
 
                           <div style={{ marginTop: "8px" }}>
                             <select
@@ -779,19 +813,40 @@ const addPayment = () => {
                     )}
 
                     <input
-                      placeholder="Job name..."
-                      value={newJob}
-                      onChange={(e) => setNewJob(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                      }}
-                    />
+  placeholder="Job name..."
+  value={newJob}
+  onChange={(e) => setNewJob(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
 
-                    <button onClick={addJob}>
-                      Add Job
-                    </button>
+<input
+  placeholder="Quote Amount"
+  value={newQuote}
+  onChange={(e) => setNewQuote(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={addJob}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Add Job
+</button>
 
                     <hr />
 
