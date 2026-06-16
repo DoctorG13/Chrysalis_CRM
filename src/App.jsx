@@ -34,6 +34,16 @@ function App() {
     type: "First Fitting",
   },
 ],
+payments: [
+  {
+    amount: 200,
+    description: "Deposit",
+  },
+  {
+    amount: 150,
+    description: "Progress Payment",
+  },
+],
           notes: [
             "Wedding dress fitting booked.",
             "Bringing original lace trim.",
@@ -80,6 +90,7 @@ appointments: [],
   hips: "",
 },
 appointments: [],
+payments: [],
           jobs: [],
         },
       ];
@@ -107,6 +118,12 @@ const [appointmentDate, setAppointmentDate] =
   useState("");
 
 const [appointmentType, setAppointmentType] =
+  useState("");
+
+const [paymentAmount, setPaymentAmount] =
+  useState("");
+
+const [paymentDescription, setPaymentDescription] =
   useState("");
 
   const saveClient = () => {
@@ -257,6 +274,45 @@ const addAppointment = () => {
 
   setAppointmentDate("");
   setAppointmentType("");
+};
+
+const addPayment = () => {
+  if (!selectedClient) return;
+
+  if (
+    paymentAmount.trim() === "" ||
+    paymentDescription.trim() === ""
+  ) {
+    return;
+  }
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        payments: [
+          ...(client.payments || []),
+          {
+            amount: paymentAmount,
+            description: paymentDescription,
+          },
+        ],
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+
+  setPaymentAmount("");
+  setPaymentDescription("");
 };
 
   const updateJobStatus = (jobIndex, newStatus) => {
@@ -846,7 +902,59 @@ const addAppointment = () => {
 
 <h3>💰 Payments</h3>
 
-<p>No payments recorded.</p>
+{selectedClient.payments?.length > 0 ? (
+  selectedClient.payments.map(
+    (payment, index) => (
+      <p key={index}>
+        💰 ${payment.amount} -{" "}
+        {payment.description}
+      </p>
+    )
+  )
+) : (
+  <p>No payments recorded.</p>
+)}
+
+<input
+  placeholder="Amount"
+  value={paymentAmount}
+  onChange={(e) =>
+    setPaymentAmount(e.target.value)
+  }
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<input
+  placeholder="Description"
+  value={paymentDescription}
+  onChange={(e) =>
+    setPaymentDescription(e.target.value)
+  }
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={addPayment}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Add Payment
+</button>
                   </div>
                 ) : (
                   <div
