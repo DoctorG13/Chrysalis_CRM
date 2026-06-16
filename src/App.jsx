@@ -129,10 +129,11 @@ const [paymentDescription, setPaymentDescription] =
   const saveClient = () => {
     if (!clientName.trim()) return;
 
-    const client = {
+  const client = {
   name: clientName,
   phone: clientPhone,
   email: clientEmail,
+
   clientSince: new Date().toLocaleDateString(),
 
   measurements: {
@@ -140,6 +141,9 @@ const [paymentDescription, setPaymentDescription] =
     waist: "",
     hips: "",
   },
+
+  appointments: [],
+  payments: [],
 
   notes: [],
   jobs: [],
@@ -343,6 +347,19 @@ const addPayment = () => {
     setSelectedClient(updatedClient);
   };
 
+
+  const totalRevenue = clients.reduce(
+  (total, client) =>
+    total +
+    (client.payments || []).reduce(
+      (paymentTotal, payment) =>
+        paymentTotal + Number(payment.amount),
+      0
+    ),
+  0
+);
+
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Quote":
@@ -474,6 +491,21 @@ const addPayment = () => {
       )}
     </h1>
   </div>
+
+  <div
+  style={{
+    background: "white",
+    padding: "20px",
+    borderRadius: "12px",
+    flex: 1,
+  }}
+>
+  <h3>💰 Revenue</h3>
+
+  <h1>${totalRevenue}</h1>
+</div>
+
+
 </div>
 
             <div
@@ -903,14 +935,31 @@ const addPayment = () => {
 <h3>💰 Payments</h3>
 
 {selectedClient.payments?.length > 0 ? (
-  selectedClient.payments.map(
-    (payment, index) => (
-      <p key={index}>
-        💰 ${payment.amount} -{" "}
-        {payment.description}
-      </p>
-    )
-  )
+  <>
+    {selectedClient.payments.map(
+      (payment, index) => (
+        <p key={index}>
+          💰 ${payment.amount} -{" "}
+          {payment.description}
+        </p>
+      )
+    )}
+
+    <p
+      style={{
+        marginTop: "15px",
+        fontWeight: "bold",
+        fontSize: "18px",
+      }}
+    >
+      Total Paid: $
+      {selectedClient.payments.reduce(
+        (total, payment) =>
+          total + Number(payment.amount),
+        0
+      )}
+    </p>
+  </>
 ) : (
   <p>No payments recorded.</p>
 )}
