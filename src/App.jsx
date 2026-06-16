@@ -103,6 +103,11 @@ appointments: [],
   const [bust, setBust] = useState("");
 const [waist, setWaist] = useState("");
 const [hips, setHips] = useState("");
+const [appointmentDate, setAppointmentDate] =
+  useState("");
+
+const [appointmentType, setAppointmentType] =
+  useState("");
 
   const saveClient = () => {
     if (!clientName.trim()) return;
@@ -188,7 +193,7 @@ const [hips, setHips] = useState("");
     setNewJob("");
   };
 
-  const saveMeasurements = () => {
+const saveMeasurements = () => {
   if (!selectedClient) return;
 
   const updatedClients = clients.map((client) => {
@@ -213,6 +218,45 @@ const [hips, setHips] = useState("");
   );
 
   setSelectedClient(updatedClient);
+};
+
+const addAppointment = () => {
+  if (!selectedClient) return;
+
+  if (
+    appointmentDate.trim() === "" ||
+    appointmentType.trim() === ""
+  ) {
+    return;
+  }
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        appointments: [
+          ...(client.appointments || []),
+          {
+            date: appointmentDate,
+            type: appointmentType,
+          },
+        ],
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+
+  setAppointmentDate("");
+  setAppointmentType("");
 };
 
   const updateJobStatus = (jobIndex, newStatus) => {
@@ -745,6 +789,7 @@ const [hips, setHips] = useState("");
 <h3>📅 Appointments</h3>
 
 {selectedClient.appointments?.length > 0 ? (
+  
   selectedClient.appointments.map(
     (appointment, index) => (
       <p key={index}>
@@ -755,6 +800,47 @@ const [hips, setHips] = useState("");
 ) : (
   <p>No appointments scheduled.</p>
 )}
+
+<input
+  placeholder="Appointment Date"
+  value={appointmentDate}
+  onChange={(e) =>
+    setAppointmentDate(e.target.value)
+  }
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<input
+  placeholder="Appointment Type"
+  value={appointmentType}
+  onChange={(e) =>
+    setAppointmentType(e.target.value)
+  }
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={addAppointment}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Add Appointment
+</button>
 
 <hr />
 
