@@ -96,12 +96,20 @@ const [hips, setHips] = useState("");
     if (!clientName.trim()) return;
 
     const client = {
-      name: clientName,
-      phone: clientPhone,
-      email: clientEmail,
-      notes: [],
-      jobs: [],
-    };
+  name: clientName,
+  phone: clientPhone,
+  email: clientEmail,
+  clientSince: new Date().toLocaleDateString(),
+
+  measurements: {
+    bust: "",
+    waist: "",
+    hips: "",
+  },
+
+  notes: [],
+  jobs: [],
+};
 
     setClients([...clients, client]);
 
@@ -167,6 +175,33 @@ const [hips, setHips] = useState("");
 
     setNewJob("");
   };
+
+  const saveMeasurements = () => {
+  if (!selectedClient) return;
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        measurements: {
+          bust,
+          waist,
+          hips,
+        },
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+};
 
   const updateJobStatus = (jobIndex, newStatus) => {
     const updatedClients = clients.map((client) => {
@@ -646,17 +681,52 @@ const [hips, setHips] = useState("");
 
 <h3>📏 Measurements</h3>
 
-<p>
-  Bust: {selectedClient.measurements?.bust || "-"}
-</p>
+<input
+  placeholder="Bust"
+  value={bust}
+  onChange={(e) => setBust(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
 
-<p>
-  Waist: {selectedClient.measurements?.waist || "-"}
-</p>
+<input
+  placeholder="Waist"
+  value={waist}
+  onChange={(e) => setWaist(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
 
-<p>
-  Hips: {selectedClient.measurements?.hips || "-"}
-</p>
+<input
+  placeholder="Hips"
+  value={hips}
+  onChange={(e) => setHips(e.target.value)}
+  style={{
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+  }}
+/>
+
+<button
+  onClick={saveMeasurements}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+>
+  Save Measurements
+</button>
 
 <hr />
 
