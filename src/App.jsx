@@ -88,6 +88,9 @@ function App() {
 
   const [newNote, setNewNote] = useState("");
   const [newJob, setNewJob] = useState("");
+  const [bust, setBust] = useState("");
+const [waist, setWaist] = useState("");
+const [hips, setHips] = useState("");
 
   const saveClient = () => {
     if (!clientName.trim()) return;
@@ -471,7 +474,13 @@ function App() {
                     .map((client, index) => (
                       <div
                         key={index}
-                        onClick={() => setSelectedClient(client)}
+                        onClick={() => {
+  setSelectedClient(client);
+
+  setBust(client.measurements?.bust || "");
+  setWaist(client.measurements?.waist || "");
+  setHips(client.measurements?.hips || "");
+}}
                         style={{
   padding: "12px",
   borderBottom: "1px solid #ddd",
