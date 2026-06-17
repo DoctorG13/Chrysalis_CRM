@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import theme from "./styles/theme";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -390,22 +392,16 @@ const addPayment = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
+  
+  <div
+    style={{
+      display: "flex",
+      ...theme.page,
+    }}
+  >
       {/* Sidebar */}
-      <div
-        style={{
-          width: "240px",
-          background: "#7A9A6D",
-          color: "white",
-          padding: "20px",
-        }}
-      >
+      <div style={theme.sidebar}>
+
         <h2>🌸 Chrysalis Studio</h2>
 
         <p>Dressmaking Management</p>
@@ -435,13 +431,8 @@ const addPayment = () => {
       </div>
 
       {/* Main Content */}
-      <div
-        style={{
-          flex: 1,
-          padding: "30px",
-          background: "#F7F5F0",
-        }}
-      >
+      <div style={theme.content}>
+
         {page === "dashboard" && (
           <>
             <h1>Good Morning Donna</h1>
