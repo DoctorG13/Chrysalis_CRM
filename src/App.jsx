@@ -751,7 +751,7 @@ const addPayment = () => {
 
 <p>
   Paid: $
-  {selectedClient.payments.reduce(
+  {(selectedClient.payments || []).reduce(
     (total, payment) =>
       total + Number(payment.amount),
     0
@@ -765,12 +765,12 @@ const addPayment = () => {
   }}
 >
   Balance: $
-  {(job.quote || 0) -
-    selectedClient.payments.reduce(
-      (total, payment) =>
-        total + Number(payment.amount),
-      0
-    )}
+{(job.quote || 0) -
+  (selectedClient.payments || []).reduce(
+    (total, payment) =>
+      total + Number(payment.amount),
+    0
+  )}
 </p>
 
                           <div style={{ marginTop: "8px" }}>
@@ -1008,7 +1008,7 @@ const addPayment = () => {
       }}
     >
       Total Paid: $
-      {selectedClient.payments.reduce(
+      {(selectedClient.payments || []).reduce(
         (total, payment) =>
           total + Number(payment.amount),
         0
