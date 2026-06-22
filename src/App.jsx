@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import theme from "./styles/theme";
 import Dashboard from "./components/Dashboard";
+import StatCard from "./components/dashboard/StatCard";
+import ClientSummary from "./components/client/ClientSummary";
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -26,6 +28,19 @@ function App() {
     waist: "72",
     hips: "98",
   },
+
+  fittings: [
+  {
+    id: Date.now(),
+    stage: "Initial Consultation",
+    date: new Date().toLocaleDateString("en-AU"),
+    measurements: {},
+    notes: "",
+    alterations: "",
+    photos: []
+  }
+],
+
   appointments: [
   {
     date: "15 Jul 2026",
@@ -74,6 +89,9 @@ payments: [
   waist: "",
   hips: "",
 },
+
+fittings: [],
+
 appointments: [],
           notes: ["Formal dress alteration."],
           jobs: [
@@ -95,6 +113,9 @@ appointments: [],
   waist: "",
   hips: "",
 },
+
+fittings: [],
+
 appointments: [],
 payments: [],
           jobs: [],
@@ -109,6 +130,13 @@ payments: [],
     setSelectedClient(clients[0]);
   }
 }, [clients, selectedClient]);
+
+useEffect(() => {
+  localStorage.setItem(
+    "chrysalisClients",
+    JSON.stringify(clients)
+  );
+}, [clients]);
 
 
   const [clientName, setClientName] = useState("");
@@ -148,6 +176,8 @@ const [paymentDescription, setPaymentDescription] =
     waist: "",
     hips: "",
   },
+
+  fittings: [],
 
   appointments: [],
   payments: [],
@@ -328,6 +358,57 @@ const addPayment = () => {
   setPaymentDescription("");
 };
 
+
+
+const addFitting = () => {
+  if (!selectedClient) return;
+
+  const stages = [
+    "Initial Consultation",
+    "First Fitting",
+    "Second Fitting",
+    "Final Fitting",
+    "Collection",
+  ];
+
+  const currentCount = selectedClient.fittings?.length || 0;
+
+  const stage =
+    stages[currentCount] || `Fitting ${currentCount + 1}`;
+
+  const newFitting = {
+    id: Date.now(),
+    stage,
+    date: new Date().toLocaleDateString("en-AU"),
+    measurements: {},
+    notes: "",
+    alterations: "",
+    photos: [],
+  };
+
+  const updatedClients = clients.map((client) => {
+    if (client.name === selectedClient.name) {
+      return {
+        ...client,
+        fittings: [
+          ...(client.fittings || []),
+          newFitting,
+        ],
+      };
+    }
+
+    return client;
+  });
+
+  setClients(updatedClients);
+
+  const updatedClient = updatedClients.find(
+    (client) => client.name === selectedClient.name
+  );
+
+  setSelectedClient(updatedClient);
+};
+
   const updateJobStatus = (jobIndex, newStatus) => {
     const updatedClients = clients.map((client) => {
       if (client.name === selectedClient.name) {
@@ -402,9 +483,9 @@ const addPayment = () => {
       {/* Sidebar */}
       <div style={theme.sidebar}>
 
-        <h2>🌸 Chrysalis Studio</h2>
+        <h2>🌸 Chrysalis Clothes</h2>
 
-        <p>Dressmaking Management</p>
+        <p>Dressmaker Business Operating System</p>
 
         <hr />
 
@@ -691,32 +772,7 @@ const addPayment = () => {
                       borderRadius: "12px",
                     }}
                   >
-                    <div
-  style={{
-    background: "#f8f8f8",
-    padding: "20px",
-    borderRadius: "12px",
-    marginBottom: "20px",
-  }}
->
-  <h2>{selectedClient.name}</h2>
-
-<p>📞 {selectedClient.phone}</p>
-
-<p>📧 {selectedClient.email}</p>
-
-<p>📅 Client Since: {selectedClient.clientSince}</p>
-
-  <hr />
-
-  <p>
-    🧵 Jobs: {selectedClient.jobs.length}
-  </p>
-
-  <p>
-    📝 Notes: {selectedClient.notes.length}
-  </p>
-</div>
+<ClientSummary selectedClient={selectedClient} />
 
                     <hr />
 
@@ -917,6 +973,45 @@ const addPayment = () => {
 >
   Save Measurements
 </button>
+
+<hr />
+
+<h3>📏 Fitting History</h3>
+
+<button
+  onClick={addFitting}
+  style={{
+    background: "#7A9A6D",
+    color: "white",
+    border: "none",
+    padding: "10px 15px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    marginBottom: "15px",
+  }}
+>
+  ➕ Record Fitting
+</button>
+
+{selectedClient.fittings?.length > 0 ? (
+  selectedClient.fittings.map((fitting, index) => (
+    <div
+      key={fitting.id}
+      style={{
+        background: "#f8f8f8",
+        padding: "12px",
+        borderRadius: "8px",
+        marginBottom: "10px",
+      }}
+    >
+      <strong>{fitting.stage}</strong>
+
+      <p>📅 {fitting.date}</p>
+    </div>
+  ))
+) : (
+  <p>No fittings recorded yet.</p>
+)}
 
 <hr />
 
