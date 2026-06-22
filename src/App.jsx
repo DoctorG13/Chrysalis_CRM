@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import theme from "./styles/theme";
 import Dashboard from "./components/Dashboard";
 import StatCard from "./components/dashboard/StatCard";
-import ClientSummary from "./components/client/ClientSummary";
+import ClientSummary from "./components/client/ClientProfile/ClientSummary";
 
 function App() {
   const [page, setPage] = useState("dashboard");
