@@ -5,6 +5,9 @@ import StatCard from "./components/dashboard/StatCard";
 import ClientSummary from "./components/client/ClientSummary";
 import JobsPanel from "./components/client/JobsPanel";
 import MeasurementsPanel from "./components/client/MeasurementsPanel";
+import FittingsPanel from "./components/client/FittingsPanel";
+import AppointmentsPanel from "./components/client/AppointmentsPanel";
+import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -776,7 +779,13 @@ const addFitting = () => {
                   >
 <ClientSummary selectedClient={selectedClient} />
 
-                    <hr />
+<hr />
+
+<GarmentWorkspace
+  selectedClient={selectedClient}
+/>
+
+<hr />
 
 <JobsPanel
   selectedClient={selectedClient}
@@ -819,18 +828,6 @@ const addFitting = () => {
                     </button>
                     <hr />
 
-{/*<MeasurementsPanel
-    selectedClient={selectedClient}
-    bust={bust}
-    waist={waist}
-    hips={hips}
-    setBust={setBust}
-    setWaist={setWaist}
-    setHips={setHips}
-    saveMeasurements={saveMeasurements}
-/>  */}
-
-
 <MeasurementsPanel
   selectedClient={selectedClient}
   bust={bust}
@@ -846,100 +843,21 @@ const addFitting = () => {
 
 <hr />
 
-<h3>📏 Fitting History</h3>
-
-<button
-  onClick={addFitting}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    marginBottom: "15px",
-  }}
->
-  ➕ Record Fitting
-</button>
-
-{selectedClient.fittings?.length > 0 ? (
-  selectedClient.fittings.map((fitting, index) => (
-    <div
-      key={fitting.id}
-      style={{
-        background: "#f8f8f8",
-        padding: "12px",
-        borderRadius: "8px",
-        marginBottom: "10px",
-      }}
-    >
-      <strong>{fitting.stage}</strong>
-
-      <p>📅 {fitting.date}</p>
-    </div>
-  ))
-) : (
-  <p>No fittings recorded yet.</p>
-)}
+<FittingsPanel
+    selectedClient={selectedClient}
+    addFitting={addFitting}
+/>
 
 <hr />
 
-<h3>📅 Appointments</h3>
-
-{selectedClient.appointments?.length > 0 ? (
-  
-  selectedClient.appointments.map(
-    (appointment, index) => (
-      <p key={index}>
-        📅 {appointment.date} - {appointment.type}
-      </p>
-    )
-  )
-) : (
-  <p>No appointments scheduled.</p>
-)}
-
-<input
-  placeholder="Appointment Date"
-  value={appointmentDate}
-  onChange={(e) =>
-    setAppointmentDate(e.target.value)
-  }
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-  }}
+<AppointmentsPanel
+  selectedClient={selectedClient}
+  appointmentDate={appointmentDate}
+  setAppointmentDate={setAppointmentDate}
+  appointmentType={appointmentType}
+  setAppointmentType={setAppointmentType}
+  addAppointment={addAppointment}
 />
-
-<input
-  placeholder="Appointment Type"
-  value={appointmentType}
-  onChange={(e) =>
-    setAppointmentType(e.target.value)
-  }
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
-/>
-
-<button
-  onClick={addAppointment}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Add Appointment
-</button>
 
 <hr />
 
