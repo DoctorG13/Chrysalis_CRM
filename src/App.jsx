@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard";
 import StatCard from "./components/dashboard/StatCard";
 import ClientSummary from "./components/client/ClientSummary";
 import JobsPanel from "./components/client/JobsPanel";
+import MeasurementsPanel from "./components/client/MeasurementsPanel";
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -818,54 +819,30 @@ const addFitting = () => {
                     </button>
                     <hr />
 
-<h3>📏 Measurements</h3>
+{/*<MeasurementsPanel
+    selectedClient={selectedClient}
+    bust={bust}
+    waist={waist}
+    hips={hips}
+    setBust={setBust}
+    setWaist={setWaist}
+    setHips={setHips}
+    saveMeasurements={saveMeasurements}
+/>  */}
 
-<input
-  placeholder="Bust"
-  value={bust}
-  onChange={(e) => setBust(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
+
+<MeasurementsPanel
+  selectedClient={selectedClient}
+  bust={bust}
+  waist={waist}
+  hips={hips}
+  setBust={setBust}
+  setWaist={setWaist}
+  setHips={setHips}
+  saveMeasurements={saveMeasurements}
 />
 
-<input
-  placeholder="Waist"
-  value={waist}
-  onChange={(e) => setWaist(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
-/>
 
-<input
-  placeholder="Hips"
-  value={hips}
-  onChange={(e) => setHips(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
-/>
-
-<button
-  onClick={saveMeasurements}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Save Measurements
-</button>
 
 <hr />
 

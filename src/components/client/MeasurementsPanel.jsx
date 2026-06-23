@@ -1,46 +1,83 @@
 import Section from "../common/Section";
 
-function MeasurementsPanel({ selectedClient }) {
+function MeasurementsPanel({
+  selectedClient,
+  bust,
+  waist,
+  hips,
+  setBust,
+  setWaist,
+  setHips,
+  saveMeasurements,
+}) {
   if (!selectedClient) return null;
-
-  const measurements = selectedClient.measurements || {};
 
   return (
     <Section
       title="📏 Measurements"
-      subtitle="Latest client measurements"
+      subtitle="Current body measurements"
     >
-      <table
+      <div
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gap: "15px",
         }}
       >
-        <tbody>
-          {Object.entries(measurements).map(([name, value]) => (
-            <tr key={name}>
-              <td
-                style={{
-                  padding: "10px",
-                  fontWeight: "bold",
-                  width: "40%",
-                  textTransform: "capitalize",
-                }}
-              >
-                {name}
-              </td>
+        <div>
+          <label>Bust</label>
 
-              <td
-                style={{
-                  padding: "10px",
-                }}
-              >
-                {value || "-"}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <input
+            value={bust}
+            onChange={(e) => setBust(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "10px",
+            }}
+          />
+        </div>
+
+        <div>
+          <label>Waist</label>
+
+          <input
+            value={waist}
+            onChange={(e) => setWaist(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "10px",
+            }}
+          />
+        </div>
+
+        <div>
+          <label>Hips</label>
+
+          <input
+            value={hips}
+            onChange={(e) => setHips(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "10px",
+            }}
+          />
+        </div>
+      </div>
+
+      <button
+        onClick={saveMeasurements}
+        style={{
+          marginTop: "20px",
+          padding: "10px 18px",
+          border: "none",
+          borderRadius: "8px",
+          background: "#7A9A6D",
+          color: "white",
+          cursor: "pointer",
+        }}
+      >
+        💾 Save Measurements
+      </button>
     </Section>
   );
 }
