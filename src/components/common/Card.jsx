@@ -1,4 +1,4 @@
-import cardStyle from "../styles/cardStyles";
+import cardStyle from "../../styles/cardStyles";
 
 function Card({
   children,

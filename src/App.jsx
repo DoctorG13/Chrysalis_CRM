@@ -3,6 +3,7 @@ import theme from "./styles/theme";
 import Dashboard from "./components/Dashboard";
 import StatCard from "./components/dashboard/StatCard";
 import ClientSummary from "./components/client/ClientSummary";
+import JobsPanel from "./components/client/JobsPanel";
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -776,124 +777,16 @@ const addFitting = () => {
 
                     <hr />
 
-                    <h3>Jobs</h3>
-
-                    {selectedClient.jobs.length === 0 ? (
-                      <p>No jobs yet.</p>
-                    ) : (
-                      selectedClient.jobs.map((job, index) => (
-                        <div
-                          key={index}
-                          style={{
-                            background: "#f5f5f5",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            borderRadius: "8px",
-                          }}
-                        >
-                          <strong>🧵 {job.name}</strong>
-                          <p>
-  Quote: ${job.quote || 0}
-</p>
-
-<p>
-  Paid: $
-  {(selectedClient.payments || []).reduce(
-    (total, payment) =>
-      total + Number(payment.amount),
-    0
-  )}
-</p>
-
-<p
-  style={{
-    fontWeight: "bold",
-    color: "#b22222",
-  }}
->
-  Balance: $
-{(job.quote || 0) -
-  (selectedClient.payments || []).reduce(
-    (total, payment) =>
-      total + Number(payment.amount),
-    0
-  )}
-</p>
-
-                          <div style={{ marginTop: "8px" }}>
-                            <select
-                              value={job.status}
-                              onChange={(e) =>
-                                updateJobStatus(
-                                  index,
-                                  e.target.value
-                                )
-                              }
-                              style={{
-                                background:
-                                  getStatusColor(job.status),
-                                color: "white",
-                                border: "none",
-                                padding: "8px",
-                                borderRadius: "8px",
-                              }}
-                            >
-                              <option value="Quote">
-                                Quote
-                              </option>
-                              <option value="In Progress">
-                                In Progress
-                              </option>
-                              <option value="Awaiting Fitting">
-                                Awaiting Fitting
-                              </option>
-                              <option value="Completed">
-                                Completed
-                              </option>
-                              <option value="Collected">
-                                Collected
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-                      ))
-                    )}
-
-                    <input
-  placeholder="Job name..."
-  value={newJob}
-  onChange={(e) => setNewJob(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
+<JobsPanel
+  selectedClient={selectedClient}
+  newJob={newJob}
+  setNewJob={setNewJob}
+  newQuote={newQuote}
+  setNewQuote={setNewQuote}
+  addJob={addJob}
+  updateJobStatus={updateJobStatus}
+  getStatusColor={getStatusColor}
 />
-
-<input
-  placeholder="Quote Amount"
-  value={newQuote}
-  onChange={(e) => setNewQuote(e.target.value)}
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
-/>
-
-<button
-  onClick={addJob}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Add Job
-</button>
 
                     <hr />
 
