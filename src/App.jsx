@@ -8,6 +8,8 @@ import MeasurementsPanel from "./components/client/MeasurementsPanel";
 import FittingsPanel from "./components/client/FittingsPanel";
 import AppointmentsPanel from "./components/client/AppointmentsPanel";
 import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
+import ClientDashboard from "./components/client/ClientDashboard";
+
 
 function App() {
   const [page, setPage] = useState("dashboard");
@@ -778,6 +780,16 @@ const addFitting = () => {
                     }}
                   >
 <ClientSummary selectedClient={selectedClient} />
+
+<hr />
+
+<ClientDashboard
+    selectedClient={selectedClient}
+/>
+
+<GarmentWorkspace
+    selectedClient={selectedClient}
+/>
 
 <hr />
 
