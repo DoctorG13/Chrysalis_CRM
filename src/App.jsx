@@ -12,6 +12,7 @@ import ClientDashboard from "./components/client/ClientDashboard";
 import ExpandableSection from "./components/common/ExpandableSection";
 import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
 import PaymentsPanel from "./components/client/PaymentsPanel";
+import NotesPanel from "./components/client/NotesPanel";
 
 
 function App() {
@@ -815,32 +816,12 @@ const addFitting = () => {
 
                     <hr />
 
-                    <h3>Notes</h3>
-
-                    {selectedClient.notes.length === 0 ? (
-                      <p>No notes yet.</p>
-                    ) : (
-                      selectedClient.notes.map(
-                        (note, index) => (
-                          <p key={index}>• {note}</p>
-                        )
-                      )
-                    )}
-
-                    <input
-                      placeholder="Add note..."
-                      value={newNote}
-                      onChange={(e) => setNewNote(e.target.value)}
-                      style={{
-                        width: "100%",
-                        padding: "10px",
-                        marginBottom: "10px",
-                      }}
-                    />
-
-                    <button onClick={addNote}>
-                      Add Note
-                    </button>
+     <NotesPanel
+  selectedClient={selectedClient}
+  newNote={newNote}
+  setNewNote={setNewNote}
+  addNote={addNote}
+/>
                     <hr />
 
 <ExpandableSection
