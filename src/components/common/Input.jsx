@@ -1,25 +1,34 @@
 function Input({
   value,
   onChange,
-  placeholder,
+  placeholder = "",
   type = "text",
+  fullWidth = true,
+  disabled = false,
   style = {},
+  ...props
 }) {
   return (
     <input
       type={type}
       value={value}
-      placeholder={placeholder}
       onChange={onChange}
+      placeholder={placeholder}
+      disabled={disabled}
       style={{
-        width: "100%",
-        padding: "10px",
-        marginBottom: "10px",
-        border: "1px solid #ccc",
+        width: fullWidth ? "100%" : "auto",
+        padding: "10px 12px",
+        border: "1px solid #D8D8D8",
         borderRadius: "8px",
+        fontSize: "0.95rem",
+        outline: "none",
         boxSizing: "border-box",
+        background: disabled ? "#F5F5F5" : "#FFFFFF",
+        color: "#333333",
+
         ...style,
       }}
+      {...props}
     />
   );
 }
