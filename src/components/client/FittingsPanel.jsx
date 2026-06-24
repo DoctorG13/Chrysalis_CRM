@@ -1,4 +1,6 @@
 import Section from "../common/Section";
+import Button from "../common/Button";
+import PanelItem from "../common/PanelItem";
 
 function FittingsPanel({
   selectedClient,
@@ -11,65 +13,51 @@ function FittingsPanel({
       title="📏 Fitting History"
       subtitle="Track every fitting throughout the life of a garment."
     >
-      <button
+      <Button
         onClick={addFitting}
         style={{
-          background: "#7A9A6D",
-          color: "white",
-          border: "none",
-          padding: "10px 16px",
-          borderRadius: "8px",
-          cursor: "pointer",
           marginBottom: "20px",
         }}
       >
         ➕ Record Fitting
-      </button>
+      </Button>
 
       {selectedClient.fittings?.length > 0 ? (
         selectedClient.fittings.map((fitting) => (
-          <div
-            key={fitting.id}
-            style={{
-              background: "#F8F8F8",
-              borderRadius: "10px",
-              padding: "15px",
-              marginBottom: "15px",
-              borderLeft: "5px solid #7A9A6D",
-            }}
-          >
-            <h4
+          <PanelItem key={fitting.id}>
+            <h3
               style={{
                 marginTop: 0,
+                marginBottom: "12px",
                 color: "#5D4037",
               }}
             >
               {fitting.stage}
-            </h4>
-
-            <p>📅 {fitting.date}</p>
+            </h3>
 
             <p>
-              📝 {fitting.notes || "No notes recorded"}
+              <strong>Date:</strong> {fitting.date}
             </p>
 
             <p>
-              ✂️ {fitting.alterations || "No alterations recorded"}
+              <strong>Notes:</strong>{" "}
+              {fitting.notes || "No notes recorded"}
             </p>
 
-            <button
+            <p>
+              <strong>Alterations:</strong>{" "}
+              {fitting.alterations || "No alterations recorded"}
+            </p>
+
+            <Button
+              variant="secondary"
               style={{
-                background: "#E8F0E4",
-                border: "1px solid #7A9A6D",
-                borderRadius: "6px",
-                padding: "8px 12px",
-                cursor: "pointer",
-                marginTop: "10px",
+                marginTop: "12px",
               }}
             >
               Open Fitting
-            </button>
-          </div>
+            </Button>
+          </PanelItem>
         ))
       ) : (
         <p>No fittings recorded yet.</p>
