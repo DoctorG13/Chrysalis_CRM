@@ -7,8 +7,10 @@ import JobsPanel from "./components/client/JobsPanel";
 import MeasurementsPanel from "./components/client/MeasurementsPanel";
 import FittingsPanel from "./components/client/FittingsPanel";
 import AppointmentsPanel from "./components/client/AppointmentsPanel";
-import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
+//import ClientWorkspace from "./components/workspaces/ClientWorkspace";
 import ClientDashboard from "./components/client/ClientDashboard";
+import ExpandableSection from "./components/common/ExpandableSection";
+import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
 
 
 function App() {
@@ -787,28 +789,28 @@ const addFitting = () => {
     selectedClient={selectedClient}
 />
 
+
 <GarmentWorkspace
+  selectedClient={selectedClient}
+/>
+
+<hr />
+
+<ExpandableSection
+  title="🧵 Jobs"
+  subtitle="Manage garment work"
+>
+  <JobsPanel
     selectedClient={selectedClient}
-/>
-
-<hr />
-
-<GarmentWorkspace
-  selectedClient={selectedClient}
-/>
-
-<hr />
-
-<JobsPanel
-  selectedClient={selectedClient}
-  newJob={newJob}
-  setNewJob={setNewJob}
-  newQuote={newQuote}
-  setNewQuote={setNewQuote}
-  addJob={addJob}
-  updateJobStatus={updateJobStatus}
-  getStatusColor={getStatusColor}
-/>
+    newJob={newJob}
+    setNewJob={setNewJob}
+    newQuote={newQuote}
+    setNewQuote={setNewQuote}
+    addJob={addJob}
+    updateJobStatus={updateJobStatus}
+    getStatusColor={getStatusColor}
+  />
+</ExpandableSection>
 
                     <hr />
 
@@ -840,36 +842,49 @@ const addFitting = () => {
                     </button>
                     <hr />
 
-<MeasurementsPanel
-  selectedClient={selectedClient}
-  bust={bust}
-  waist={waist}
-  hips={hips}
-  setBust={setBust}
-  setWaist={setWaist}
-  setHips={setHips}
-  saveMeasurements={saveMeasurements}
-/>
-
-
+<ExpandableSection
+  title="📏 Measurements"
+  subtitle="Client body measurements"
+>
+  <MeasurementsPanel
+    selectedClient={selectedClient}
+    bust={bust}
+    waist={waist}
+    hips={hips}
+    setBust={setBust}
+    setWaist={setWaist}
+    setHips={setHips}
+    saveMeasurements={saveMeasurements}
+  />
+</ExpandableSection>
 
 <hr />
 
-<FittingsPanel
+<ExpandableSection
+  title="🧵 Fittings"
+  subtitle="History of all fittings"
+>
+  <FittingsPanel
     selectedClient={selectedClient}
     addFitting={addFitting}
-/>
+  />
+</ExpandableSection>
 
 <hr />
 
-<AppointmentsPanel
-  selectedClient={selectedClient}
-  appointmentDate={appointmentDate}
-  setAppointmentDate={setAppointmentDate}
-  appointmentType={appointmentType}
-  setAppointmentType={setAppointmentType}
-  addAppointment={addAppointment}
-/>
+<ExpandableSection
+  title="📅 Appointments"
+  subtitle="Upcoming appointments"
+>
+  <AppointmentsPanel
+    selectedClient={selectedClient}
+    appointmentDate={appointmentDate}
+    setAppointmentDate={setAppointmentDate}
+    appointmentType={appointmentType}
+    setAppointmentType={setAppointmentType}
+    addAppointment={addAppointment}
+  />
+</ExpandableSection>
 
 <hr />
 
