@@ -1,4 +1,5 @@
 import Section from "../common/Section";
+import StatCard from "../dashboard/StatCard";
 
 function ClientDashboard({ selectedClient }) {
   if (!selectedClient) return null;
@@ -17,28 +18,20 @@ function ClientDashboard({ selectedClient }) {
   const nextAppointment =
     selectedClient.appointments?.[0];
 
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "20px",
+  };
+
   return (
     <Section
       title="📊 Client Dashboard"
       subtitle="Everything important at a glance"
     >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit, minmax(220px,1fr))",
-          gap: "20px",
-        }}
-      >
-        <div
-          style={{
-            background: "#F8F8F8",
-            padding: "18px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>👗 Active Garment</h3>
+      <div style={gridStyle}>
 
+        <StatCard title="👗 Active Garment">
           <p>
             {activeJob
               ? activeJob.name
@@ -48,17 +41,9 @@ function ClientDashboard({ selectedClient }) {
           <strong>
             {activeJob?.status || ""}
           </strong>
-        </div>
+        </StatCard>
 
-        <div
-          style={{
-            background: "#F8F8F8",
-            padding: "18px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>📏 Measurements</h3>
-
+        <StatCard title="📏 Measurements">
           <p>
             Bust: {selectedClient.measurements?.bust || "--"}
           </p>
@@ -70,33 +55,17 @@ function ClientDashboard({ selectedClient }) {
           <p>
             Hips: {selectedClient.measurements?.hips || "--"}
           </p>
-        </div>
+        </StatCard>
 
-        <div
-          style={{
-            background: "#F8F8F8",
-            padding: "18px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>🧵 Fittings</h3>
-
+        <StatCard title="🧵 Fittings">
           <h2>
             {selectedClient.fittings?.length || 0}
           </h2>
 
           <p>Recorded fittings</p>
-        </div>
+        </StatCard>
 
-        <div
-          style={{
-            background: "#F8F8F8",
-            padding: "18px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>📅 Next Appointment</h3>
-
+        <StatCard title="📅 Next Appointment">
           {nextAppointment ? (
             <>
               <p>{nextAppointment.date}</p>
@@ -108,23 +77,16 @@ function ClientDashboard({ selectedClient }) {
           ) : (
             <p>No appointment</p>
           )}
-        </div>
+        </StatCard>
 
-        <div
-          style={{
-            background: "#F8F8F8",
-            padding: "18px",
-            borderRadius: "10px",
-          }}
-        >
-          <h3>💰 Outstanding</h3>
-
+        <StatCard title="💰 Outstanding">
           <h2>${outstanding}</h2>
 
           <p>
             Paid ${totalPaid}
           </p>
-        </div>
+        </StatCard>
+
       </div>
     </Section>
   );
