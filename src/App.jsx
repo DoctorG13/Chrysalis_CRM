@@ -11,6 +11,7 @@ import AppointmentsPanel from "./components/client/AppointmentsPanel";
 import ClientDashboard from "./components/client/ClientDashboard";
 import ExpandableSection from "./components/common/ExpandableSection";
 import GarmentWorkspace from "./components/workspaces/GarmentWorkspace";
+import PaymentsPanel from "./components/client/PaymentsPanel";
 
 
 function App() {
@@ -888,78 +889,14 @@ const addFitting = () => {
 
 <hr />
 
-<h3>💰 Payments</h3>
-
-{selectedClient.payments?.length > 0 ? (
-  <>
-    {selectedClient.payments.map(
-      (payment, index) => (
-        <p key={index}>
-          💰 ${payment.amount} -{" "}
-          {payment.description}
-        </p>
-      )
-    )}
-
-    <p
-      style={{
-        marginTop: "15px",
-        fontWeight: "bold",
-        fontSize: "18px",
-      }}
-    >
-      Total Paid: $
-      {(selectedClient.payments || []).reduce(
-        (total, payment) =>
-          total + Number(payment.amount),
-        0
-      )}
-    </p>
-  </>
-) : (
-  <p>No payments recorded.</p>
-)}
-
-<input
-  placeholder="Amount"
-  value={paymentAmount}
-  onChange={(e) =>
-    setPaymentAmount(e.target.value)
-  }
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginTop: "10px",
-    marginBottom: "10px",
-  }}
+<PaymentsPanel
+  selectedClient={selectedClient}
+  paymentAmount={paymentAmount}
+  setPaymentAmount={setPaymentAmount}
+  paymentDescription={paymentDescription}
+  setPaymentDescription={setPaymentDescription}
+  addPayment={addPayment}
 />
-
-<input
-  placeholder="Description"
-  value={paymentDescription}
-  onChange={(e) =>
-    setPaymentDescription(e.target.value)
-  }
-  style={{
-    width: "100%",
-    padding: "10px",
-    marginBottom: "10px",
-  }}
-/>
-
-<button
-  onClick={addPayment}
-  style={{
-    background: "#7A9A6D",
-    color: "white",
-    border: "none",
-    padding: "10px 15px",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
->
-  Add Payment
-</button>
                   </div>
                 ) : (
                   <div
