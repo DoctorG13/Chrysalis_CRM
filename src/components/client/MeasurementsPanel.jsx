@@ -1,4 +1,6 @@
 import Section from "../common/Section";
+import Button from "../common/Button";
+import Input from "../common/Input";
 
 function MeasurementsPanel({
   selectedClient,
@@ -12,72 +14,73 @@ function MeasurementsPanel({
 }) {
   if (!selectedClient) return null;
 
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+    gap: "20px",
+    marginTop: "20px",
+    marginBottom: "25px",
+  };
+
+  const labelStyle = {
+    display: "block",
+    marginBottom: "8px",
+    fontWeight: "600",
+    color: "#5D4037",
+  };
+
   return (
     <Section
       title="📏 Measurements"
       subtitle="Current body measurements"
     >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: "15px",
-        }}
-      >
+      <div style={gridStyle}>
         <div>
-          <label>Bust</label>
+          <label style={labelStyle}>
+            Bust
+          </label>
 
-          <input
+          <Input
             value={bust}
-            onChange={(e) => setBust(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-            }}
+            onChange={(e) =>
+              setBust(e.target.value)
+            }
+            placeholder="Bust"
           />
         </div>
 
         <div>
-          <label>Waist</label>
+          <label style={labelStyle}>
+            Waist
+          </label>
 
-          <input
+          <Input
             value={waist}
-            onChange={(e) => setWaist(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-            }}
+            onChange={(e) =>
+              setWaist(e.target.value)
+            }
+            placeholder="Waist"
           />
         </div>
 
         <div>
-          <label>Hips</label>
+          <label style={labelStyle}>
+            Hips
+          </label>
 
-          <input
+          <Input
             value={hips}
-            onChange={(e) => setHips(e.target.value)}
-            style={{
-              width: "100%",
-              padding: "10px",
-            }}
+            onChange={(e) =>
+              setHips(e.target.value)
+            }
+            placeholder="Hips"
           />
         </div>
       </div>
 
-      <button
-        onClick={saveMeasurements}
-        style={{
-          marginTop: "20px",
-          padding: "10px 18px",
-          border: "none",
-          borderRadius: "8px",
-          background: "#7A9A6D",
-          color: "white",
-          cursor: "pointer",
-        }}
-      >
+      <Button onClick={saveMeasurements}>
         💾 Save Measurements
-      </button>
+      </Button>
     </Section>
   );
 }
